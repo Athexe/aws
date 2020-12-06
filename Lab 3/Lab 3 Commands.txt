@@ -1,0 +1,10 @@
+aws ec2 modify-subnet-attribute --subnet-id subnet-2f923644 --map-public-ip-on-launch
+aws ec2 create-key-pair --key-name LAB3KEY --query 'Lab3Key' --output text > LAB3KEY.pem
+aws ec2 create-security-group --group-name Lab3 --description "Lab 3 SG"
+aws ec2 authorize-security-group-ingress --group-id sg-0324ff9c7a47fca8a --protocol tcp --port 22 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-id sg-0324ff9c7a47fca8a --protocol tcp --port 80 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-id sg-0324ff9c7a47fca8a --protocol tcp --port 443 --cidr 0.0.0.0/0
+aws ec2 run-instances --image-id ami-03657b56516ab7912 --count 1 --instance-type t2.micro --key-name LAB3KEY --security-group-ids sg-0324ff9c7a47fca8a --subnet-id subnet-2f923644 --user-data file://UserData.txt
+aws ec2 create-tags --resources i-064df1ec2369b2667 --tags Key=Role,Value=WebServer
+aws ec2 create-image --instance-id i-064df1ec2369b2667 --name "Lab3" --description "Image (Apache Web Server)"
+AMI ami-019f3fb39ed193b59
